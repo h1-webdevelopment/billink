@@ -50,7 +50,7 @@ class Config extends BasePaymentConfig
      * @param Interceptor|null $store
      * @return string
      */
-    public function getLogo(Interceptor $store = null)
+    public function getLogo(?Interceptor $store = null)
     {
         $value = $this->getValue(self::FIELD_LOGO);
 

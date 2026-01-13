@@ -12,7 +12,7 @@ interface MidpagePaymentDataInterface
     public function savePaymentInformationAndPlaceOrder(
         int $cartId,
         \Magento\Quote\Api\Data\PaymentInterface $paymentMethod,
-        \Magento\Quote\Api\Data\AddressInterface $billingAddress = null
+        ?\Magento\Quote\Api\Data\AddressInterface $billingAddress = null
     ): MidpageResultDataInterface;
 
     /**
@@ -27,6 +27,6 @@ interface MidpagePaymentDataInterface
         string $cartId,
         string $email,
         \Magento\Quote\Api\Data\PaymentInterface $paymentMethod,
-        \Magento\Quote\Api\Data\AddressInterface $billingAddress = null
+        ?\Magento\Quote\Api\Data\AddressInterface $billingAddress = null
     ): MidpageResultDataInterface;
 }

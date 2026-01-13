@@ -16,7 +16,7 @@ class ResponseException extends \Exception
      * @param string $service
      * @param \Exception|null $previous
      */
-    public function __construct($code = 0, $service = 'general', $description = null, \Exception $previous = null)
+    public function __construct($code = 0, $service = 'general', $description = null, ?\Exception $previous = null)
     {
         $message = ErrorMessage::get($code, $service, $description);
 

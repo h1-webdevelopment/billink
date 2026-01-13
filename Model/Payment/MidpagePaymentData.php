@@ -29,7 +29,7 @@ class MidpagePaymentData implements MidpagePaymentDataInterface
     public function savePaymentInformationAndPlaceOrder(
         int $cartId,
         \Magento\Quote\Api\Data\PaymentInterface $paymentMethod,
-        \Magento\Quote\Api\Data\AddressInterface $billingAddress = null
+        ?\Magento\Quote\Api\Data\AddressInterface $billingAddress = null
     ): MidpageResultDataInterface {
         $orderId = $this->paymentInformationManagement
             ->savePaymentInformationAndPlaceOrder($cartId, $paymentMethod, $billingAddress);
@@ -48,7 +48,7 @@ class MidpagePaymentData implements MidpagePaymentDataInterface
         string $cartId,
         string $email,
         \Magento\Quote\Api\Data\PaymentInterface $paymentMethod,
-        \Magento\Quote\Api\Data\AddressInterface $billingAddress = null
+        ?\Magento\Quote\Api\Data\AddressInterface $billingAddress = null
     ): MidpageResultDataInterface {
         $orderId = $this->guestPaymentInformationManagement
             ->savePaymentInformationAndPlaceOrder($cartId, $email, $paymentMethod, $billingAddress);

@@ -39,7 +39,7 @@ class MidpageConfig extends BasePaymentConfig
      * @param StoreInterface|null $store
      * @return string
      */
-    public function getLogo(StoreInterface $store = null): string
+    public function getLogo(?StoreInterface $store = null): string
     {
         $value = $this->getValue(self::FIELD_LOGO);
 

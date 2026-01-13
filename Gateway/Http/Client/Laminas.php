@@ -42,7 +42,7 @@ class Laminas implements ClientInterface
     public function __construct(
         LaminasClientFactory $clientFactory,
         Logger $logger,
-        ConverterInterface $converter = null
+        ?ConverterInterface $converter = null
     ) {
         $this->clientFactory = $clientFactory;
         $this->converter = $converter;
