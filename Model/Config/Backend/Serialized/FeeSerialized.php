@@ -37,7 +37,7 @@ class FeeSerialized extends ArraySerialized
         );
     }
 
-    protected function _getValidationRulesBeforeSave()
+    protected function _getValidationRulesBeforeSave(): FeeValidator
     {
         return $this->feeValidator;
     }
