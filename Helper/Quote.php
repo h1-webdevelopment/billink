@@ -3,46 +3,26 @@
 namespace Billink\Billink\Helper;
 
 use Billink\Billink\Gateway\Helper\SubjectReader;
+use Magento\Quote\Model\Quote as MagentoQuote;
+use Magento\Sales\Model\Order;
 
-/**
- * Class Quote
- * @package Billink\Billink\Helper
- */
 class Quote
 {
-    /**
-     * @var SubjectReader
-     */
-    private $subjectReader;
-
-    /**
-     * Quote constructor.
-     * @param SubjectReader $subjectReader
-     */
     public function __construct(
-        SubjectReader $subjectReader
+        private readonly SubjectReader $subjectReader
     ) {
-        $this->subjectReader = $subjectReader;
     }
 
-    /**
-     * @param \Magento\Quote\Model\Quote $quote
-     * @return string
-     */
-    public function getWorkflowType($quote)
+    public function getWorkflowType(MagentoQuote $quote): string
     {
         $payment = $quote->getPayment();
 
         return $this->subjectReader->readPaymentWorkflowType(['payment' => $payment]);
     }
 
-    /**
-     * @param \Magento\Quote\Model\Quote|\Magento\Sales\Model\Order $quoteData
-     * @return float
-     */
-    public function getTotalInclTax($quoteData)
+    public function getTotalInclTax(MagentoQuote|Order $quoteData): float
     {
-        $grandTotal = 0;
+        $grandTotal = 0.0;
 
         foreach ($this->getQuoteItems($quoteData) as $item) {
             $itemPrice = $item->getPriceInclTax() * ($item->getQty() ?: $item->getQtyOrdered());
@@ -53,13 +33,13 @@ class Quote
         return $grandTotal;
     }
 
-    public function getQuoteItems($quoteData)
+    public function getQuoteItems(MagentoQuote|Order $quoteData): array|false
     {
-        if ($quoteData instanceof \Magento\Quote\Model\Quote) {
+        if ($quoteData instanceof MagentoQuote) {
             return $quoteData->getItemsCollection();
         }
 
-        if ($quoteData instanceof \Magento\Sales\Model\Order) {
+        if ($quoteData instanceof Order) {
             return $quoteData->getItems();
         }
 
