@@ -8,6 +8,7 @@ use Billink\Billink\Observer\DataAssignObserver;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\DataObject;
 use Magento\Quote\Model\Quote;
+use Magento\Sales\Model\Order;
 use Magento\Tax\Model\CalculationFactory;
 
 class BillinkFee
@@ -48,7 +49,7 @@ class BillinkFee
         return $this->feeHelper->getFeeIncludesTax();
     }
 
-    public function getBaseAmount(Quote $quote): float
+    public function getBaseAmount(Quote|Order $quote): float
     {
         $workflowType = $this->quoteHelper->getWorkflowType($quote);
 
