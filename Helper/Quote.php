@@ -4,6 +4,7 @@ namespace Billink\Billink\Helper;
 
 use Billink\Billink\Gateway\Helper\SubjectReader;
 use Magento\Quote\Model\Quote as MagentoQuote;
+use Magento\Quote\Model\ResourceModel\Quote\Item\Collection;
 use Magento\Sales\Model\Order;
 
 class Quote
@@ -13,7 +14,7 @@ class Quote
     ) {
     }
 
-    public function getWorkflowType(MagentoQuote $quote): string
+    public function getWorkflowType(MagentoQuote|Order $quote): string
     {
         $payment = $quote->getPayment();
 
@@ -33,7 +34,7 @@ class Quote
         return $grandTotal;
     }
 
-    public function getQuoteItems(MagentoQuote|Order $quoteData): array|false
+    public function getQuoteItems(MagentoQuote|Order $quoteData): Collection|array|false
     {
         if ($quoteData instanceof MagentoQuote) {
             return $quoteData->getItemsCollection();
