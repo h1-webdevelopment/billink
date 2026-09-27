@@ -1,34 +1,8 @@
 <?xml version="1.0"?>
-
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
     <default>
         <payment>
-            <billink>
-                <api_version>BILLINK2.0</api_version>
-                <active>0</active>
-                <title>Achteraf betalen</title>
-                <debug>0</debug>
-                <sort_order>2</sort_order>
-                <use_workflow>workflow_all</use_workflow>
-                <workflow>
-                    {"workflow_P":{"type":"Private","number":"3","max_amount":"400","is_with_check":"1"},"workflow_B":{"type":"Business","number":"3","max_amount":"500","is_with_check":"1"}}
-                </workflow>
-                <is_alternate_delivery_address_allowed>1</is_alternate_delivery_address_allowed>
-                <fee_type>1</fee_type>
-                <fee_label>Billink service kosten</fee_label>
-                <model>BillinkPaymentFacade</model>
-                <order_status>processing</order_status>
-                <payment_action>order</payment_action>
-                <currency>EUR</currency>
-                <can_order>1</can_order>
-                <can_refund>1</can_refund>
-                <can_refund_partial_per_invoice>1</can_refund_partial_per_invoice>
-                <can_use_checkout>1</can_use_checkout>
-                <can_use_internal>1</can_use_internal>
-                <is_gateway>1</is_gateway>
-                <is_invoice_email_enabled>1</is_invoice_email_enabled>
-            </billink>
             <billink_midpage>
                 <api_version>BILLINK2.0</api_version>
                 <active>0</active>
@@ -54,6 +28,10 @@
                 <trust_score>0</trust_score>
                 <fee_type>1</fee_type>
                 <fee_label>Betaalkosten</fee_label>
+                <use_workflow>workflow_all</use_workflow>
+                <workflow>
+                    {"workflow_P":{"type":"Private","number":"3","max_amount":"400","is_with_check":"1"},"workflow_B":{"type":"Business","number":"3","max_amount":"500","is_with_check":"1"}}
+                </workflow>
             </billink_midpage>
         </payment>
         <sales>

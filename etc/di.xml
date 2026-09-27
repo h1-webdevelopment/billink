@@ -30,6 +30,10 @@
         </arguments>
     </virtualType>
 
+    <!-- Shared gateway infrastructure (Check/Order/StartWorkflow): still used by the Midpage facade's
+         validatorPool and by the shipment observer below, even though the legacy standalone Billink
+         payment method (BillinkPaymentFacade) was removed. -->
+
     <virtualType name="BillinkPaymentLogger" type="Magento\Payment\Model\Method\Logger">
         <arguments>
             <argument name="logger" xsi:type="object">BillinkLogger</argument>
@@ -37,45 +41,10 @@
         </arguments>
     </virtualType>
 
-    <virtualType name="BillinkPaymentFacade" type="Magento\Payment\Model\Method\Adapter">
-        <arguments>
-            <argument name="code" xsi:type="const">\Billink\Billink\Model\Ui\ConfigProvider::CODE</argument>
-            <argument name="formBlockType" xsi:type="string">
-                \Billink\Billink\Block\Adminhtml\Order\Create\Billing\Method\Form
-            </argument>
-            <argument name="infoBlockType" xsi:type="string">Magento\Payment\Block\ConfigurableInfo</argument>
-            <argument name="valueHandlerPool" xsi:type="object">BillinkPaymentValueHandlerPool</argument>
-            <argument name="commandPool" xsi:type="object">BillinkPaymentCommandPool</argument>
-            <argument name="validatorPool" xsi:type="object">BillinkPaymentValidatorPool</argument>
-        </arguments>
-    </virtualType>
-
     <virtualType name="BillinkRequestClient" type="Billink\Billink\Gateway\Http\Client\Laminas">
         <arguments>
             <argument name="logger" xsi:type="object">BillinkPaymentLogger</argument>
             <argument name="converter" xsi:type="object">Billink\Billink\Gateway\Converter\ResponseConverter</argument>
-        </arguments>
-    </virtualType>
-
-    <virtualType name="BillinkPaymentValueHandlerPool" type="Magento\Payment\Gateway\Config\ValueHandlerPool">
-        <arguments>
-            <argument name="handlers" xsi:type="array">
-                <item name="default" xsi:type="string">BillinkPaymentConfigValueHandler</item>
-            </argument>
-        </arguments>
-    </virtualType>
-    <virtualType name="BillinkPaymentConfigValueHandler" type="Magento\Payment\Gateway\Config\ConfigValueHandler">
-        <arguments>
-            <argument name="configInterface" xsi:type="object">BillinkPaymentConfig</argument>
-        </arguments>
-    </virtualType>
-
-    <virtualType name="BillinkPaymentCommandPool" type="Magento\Payment\Gateway\Command\CommandPool">
-        <arguments>
-            <argument name="commands" xsi:type="array">
-                <item name="order" xsi:type="string">BillinkPaymentOrderCommand</item>
-                <item name="refund" xsi:type="string">BillinkPaymentRefundCommand</item>
-            </argument>
         </arguments>
     </virtualType>
 
@@ -114,19 +83,6 @@
             <argument name="handler" xsi:type="object">Billink\Billink\Gateway\Response\StartWorkflow\Handler</argument>
             <argument name="validator" xsi:type="object">
                 Billink\Billink\Gateway\Validator\StartWorkflow\ResponseValidator
-            </argument>
-            <argument name="logger" xsi:type="object">BillinkLogger</argument>
-        </arguments>
-    </virtualType>
-
-    <virtualType name="BillinkPaymentRefundCommand" type="Magento\Payment\Gateway\Command\GatewayCommand">
-        <arguments>
-            <argument name="requestBuilder" xsi:type="object">BillinkPaymentRefundRequestComposite</argument>
-            <argument name="transferFactory" xsi:type="object">Billink\Billink\Gateway\Http\TransferFactory</argument>
-            <argument name="client" xsi:type="object">BillinkRequestClient</argument>
-            <argument name="handler" xsi:type="object">Billink\Billink\Gateway\Response\Order\Refund\Handler</argument>
-            <argument name="validator" xsi:type="object">
-                Billink\Billink\Gateway\Validator\Order\Refund\ResponseValidator
             </argument>
             <argument name="logger" xsi:type="object">BillinkLogger</argument>
         </arguments>
@@ -177,22 +133,6 @@
         <arguments>
             <argument name="action" xsi:type="string">Order</argument>
             <argument name="service" xsi:type="const">\Billink\Billink\Gateway\Helper\Gateway::SERVICE_ORDER</argument>
-        </arguments>
-    </virtualType>
-
-    <virtualType name="BillinkPaymentRefundRequestComposite" type="Magento\Payment\Gateway\Request\BuilderComposite">
-        <arguments>
-            <argument name="builders" xsi:type="array">
-                <item name="clientData" xsi:type="string">Billink\Billink\Gateway\Request\ClientDataBuilder</item>
-                <item name="actionData" xsi:type="string">BillinkPaymentRefundActionBuilder</item>
-                <item name="invoiceData" xsi:type="string">Billink\Billink\Gateway\Request\CreditDataBuilder</item>
-            </argument>
-        </arguments>
-    </virtualType>
-    <virtualType name="BillinkPaymentRefundActionBuilder" type="Billink\Billink\Gateway\Request\ActionDataBuilder">
-        <arguments>
-            <argument name="action" xsi:type="string">Credit</argument>
-            <argument name="service" xsi:type="const">\Billink\Billink\Gateway\Helper\Gateway::SERVICE_CREDIT</argument>
         </arguments>
     </virtualType>
 
@@ -633,6 +573,19 @@
             <argument name="feeHelper" xsi:type="object">MidpageFeeHelper</argument>
         </arguments>
     </virtualType>
+
+    <!-- Workflow settings (Private/Business tiers) read from the Midpage config, not the legacy one -->
+    <virtualType name="MidpageWorkflowHelper" type="Billink\Billink\Gateway\Helper\Workflow">
+        <arguments>
+            <argument name="config" xsi:type="object">Billink\Billink\Gateway\Config\MidpageConfig</argument>
+        </arguments>
+    </virtualType>
+
+    <type name="Billink\Billink\Observer\DataAssignMidpageObserver">
+        <arguments>
+            <argument name="workflowHelper" xsi:type="object">MidpageWorkflowHelper</argument>
+        </arguments>
+    </type>
 
     <!-- For trasnactions of midpage - replace class with updated virtual one -->
     <type name="Billink\Billink\Gateway\Request\Midpage\SessionCreate\Transaction">
