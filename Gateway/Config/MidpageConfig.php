@@ -27,6 +27,8 @@ class MidpageConfig extends BasePaymentConfig
     public const FIELD_API_VERSION = 'api_version';
     public const FIELD_WORKFLOW = 'workflow';
     public const FIELD_USED_WORKFLOW = 'use_workflow';
+    public const FIELD_ALLOW_SPECIFIC = 'allowspecific';
+    public const FIELD_SPECIFIC_COUNTRY = 'specificcountry';
 
     public function __construct(
         ScopeConfigInterface $scopeConfig,
@@ -111,5 +113,15 @@ class MidpageConfig extends BasePaymentConfig
     public function getUsedWorkflow(?int $storeId = null): ?string
     {
         return $this->getValue(self::FIELD_USED_WORKFLOW, $storeId);
+    }
+
+    public function getAllowSpecific(): string
+    {
+        return (string) $this->getValue(self::FIELD_ALLOW_SPECIFIC);
+    }
+
+    public function getSpecificCountry(): string
+    {
+        return (string) $this->getValue(self::FIELD_SPECIFIC_COUNTRY);
     }
 }
